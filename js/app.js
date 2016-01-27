@@ -2,7 +2,7 @@
  * @description represents a Enemy
  * @constructor
  */
-var Enemy = function() {
+var Enemy = function(){
 	this.sprite = 'images/enemy-bug.png';
 	this.startBug();
 };
@@ -10,12 +10,12 @@ var Enemy = function() {
 /**
  * @description starts the bug from the randomized position
  */
-Enemy.prototype.startBug=function(){
-	this.x=-colWidth;
+Enemy.prototype.startBug = function(){
+	this.x =-colWidth;
 	// random  number is used to generate the bug in different rows
 	// and at different speeds
-	this.y=75 * randomize(1,3);
-	this.speed=randomize(50,100);
+	this.y=75 * randomize(1, 3);
+	this.speed=randomize(50, 100);
 
 };
 
@@ -24,7 +24,7 @@ Enemy.prototype.startBug=function(){
 * @param {number} dt
 * 
 */
-Enemy.prototype.update = function(dt) {
+Enemy.prototype.update = function(dt){
 	
 	this.x=this.x+dt*this.speed;
 
@@ -131,7 +131,7 @@ Player.prototype.handleInput=function(value){
 
 
 	if(value=="up" && this.y >0){	
-		this.update(value)
+		this.update(value);
 	}
 	else if(value=="left" && this.x > 0){
 		this.update(value);
@@ -229,9 +229,9 @@ var colWidth = 101,
     playerStartposY = 415;
 
 
-gems=[new GemBlue(), new GemOrange()];
-allEnemies=[new Enemy(), new Enemy(), new Enemy()];
-player=new Player();
+var gems=[new GemBlue(), new GemOrange()];
+var allEnemies=[new Enemy(), new Enemy(), new Enemy()];
+var player=new Player();
 
 
 /**
