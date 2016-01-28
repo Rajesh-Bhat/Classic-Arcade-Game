@@ -11,11 +11,11 @@ var Enemy = function(){
  * @description starts the bug from the randomized position
  */
 Enemy.prototype.startBug = function(){
-	this.x =-colWidth;
+	this.x =- colWidth;
 	// random  number is used to generate the bug in different rows
 	// and at different speeds
-	this.y=75 * randomize(1, 3);
-	this.speed=randomize(50, 100);
+	this.y = 75 * randomize(1, 3);
+	this.speed = randomize(120, 170);
 
 };
 
@@ -26,14 +26,14 @@ Enemy.prototype.startBug = function(){
 */
 Enemy.prototype.update = function(dt){
 	
-	this.x=this.x+dt*this.speed;
+	this.x = this.x + dt*this.speed;
 
 	if(this.x > 505){
 		this.startBug();
 	}
 
 	// if collision happens move the player to the start position
-	if(player.x >= this.x && player.x <= this.x+colWidth && player.y >= this.y && player.y <= this.y+rowHeight){
+	if(player.x >= this.x && player.x <= this.x + colWidth && player.y >= this.y && player.y <= this.y + rowHeight){
 		player.startPlayer();
 		player.updateScore(-5);
 	}
@@ -52,7 +52,7 @@ Enemy.prototype.render = function() {
  * @constructor
  *
  */
-var Player=function(){
+var Player = function(){
 	
 	this.sprite = 'images/char-boy.png';
 
@@ -63,40 +63,17 @@ var Player=function(){
 	this.score=0;	
 };
 
-
-/**
- * @description updating the player's position based on the key pressed
- * @param {string} direction
- */
-Player.prototype.update=function(direction){
-
-	if(direction=="up"){
-		this.y=this.y-rowHeight;
-	}
-	else if(direction=="down"){
-		this.y=this.y+rowHeight;
-	}
-	else if(direction=="left"){
-		this.x=this.x-colWidth;
-	}
-	else if(direction=="right"){
-		this.x=this.x+colWidth;
-	}
-
-	this.detectGemCollision();
-	
-};
-
 /**
  * @description detects whether player has picked the gem and if he has picked
  * gem will be placed in the random position
  *
  */
-Player.prototype.detectGemCollision=function(){
+Player.prototype.detectGemCollision = function(){
 
+	var self=this;
 	gems.forEach(function(gem) {
-		if(player.x == gem.x && player.y == gem.y){
-			player.updateScore(gem.points);
+		if(self.x == gem.x && self.y == gem.y){
+			self.updateScore(gem.points);
 			gem.appear();
 		}
 	});
@@ -104,13 +81,44 @@ Player.prototype.detectGemCollision=function(){
 };
 
 /**
+ * @description updating the player's position based on the key pressed
+ * @param {string} direction
+ */
+Player.prototype.update = function(direction){
+
+	if(direction == "up"){
+		this.y = this.y-rowHeight;
+	}
+	else if(direction == "down"){
+		this.y = this.y+rowHeight;
+	}
+	else if(direction == "left"){
+		this.x = this.x-colWidth;
+	}
+	else if(direction == "right"){
+		this.x = this.x+colWidth;
+	}
+
+	this.detectGemCollision();
+
+	// move the player to the initial position if he has reached the water surface
+	if(this.y === 0){
+
+		this.updateScore(20);
+		this.startPlayer();
+	}
+
+
+};
+
+/**
  * @description updates the player score based on the event(gem pick or collision with enemy)
  *
  */
-Player.prototype.updateScore=function(points){
+Player.prototype.updateScore = function(points){
 	
-	player.score=player.score + points;
-	document.getElementById("result").innerHTML=player.score;
+	this.score = this.score + points;
+	document.getElementById("result").innerHTML = this.score;
 	
 };
 
@@ -127,19 +135,19 @@ Player.prototype.render = function() {
 @description passes the value to the update function based on key pressed
 @param {string} value
  */
-Player.prototype.handleInput=function(value){
+Player.prototype.handleInput = function(value){
 
 
-	if(value=="up" && this.y >0){	
+	if(value == "up" && this.y >0){
 		this.update(value);
 	}
-	else if(value=="left" && this.x > 0){
+	else if(value == "left" && this.x > 0){
 		this.update(value);
 	}
-	else if(value=="down" && this.y < 415){	
+	else if(value == "down" && this.y < 415){
 		this.update(value);	
 	}
-	else if(value=="right" && this.x < 404){	
+	else if(value == "right" && this.x < 404){
 		this.update(value);
 	}
 				
@@ -149,10 +157,10 @@ Player.prototype.handleInput=function(value){
  * @description used to move the player to the initial position
  *
  */
-Player.prototype.startPlayer=function(){
+Player.prototype.startPlayer = function(){
 
-	this.x=playerStartposX;
-	this.y=playerStartposY;
+	this.x = playerStartposX;
+	this.y = playerStartposY;
 	
 };
 
@@ -161,7 +169,7 @@ Player.prototype.startPlayer=function(){
  * @constructor
  *
  */
-var Gem=function(){
+var Gem = function(){
 	this.appear();
 };
 
@@ -169,7 +177,7 @@ var Gem=function(){
  * @description Randomly position's the gem
  *
  */
-Gem.prototype.appear=function(){
+Gem.prototype.appear = function(){
 
 	this.x = colWidth * randomize(0,5);
 	this.y = rowHeight * randomize(1,3);
@@ -180,7 +188,7 @@ Gem.prototype.appear=function(){
  * @description draws the gem on the screen
  *
  */
-Gem.prototype.render=function(){
+Gem.prototype.render = function(){
 
 	ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
@@ -191,15 +199,15 @@ Gem.prototype.render=function(){
  * @constructor
  *
  */
-var GemOrange=function(){
+var GemOrange = function(){
 
 	Gem.call(this);
-	this.sprite='images/gem-orange.png';
-	this.points=5;
+	this.sprite = 'images/gem-orange.png';
+	this.points = 5;
 };
 
-GemOrange.prototype=Object.create(Gem.prototype);
-GemOrange.prototype.constructor=Gem;
+GemOrange.prototype = Object.create(Gem.prototype);
+GemOrange.prototype.constructor = Gem;
 
 
 /**
@@ -207,15 +215,15 @@ GemOrange.prototype.constructor=Gem;
  * @constructor
  *
  */
-var GemBlue=function(){
+var GemBlue = function(){
 
 	Gem.call(this);
-	this.sprite='images/gem-blue.png';
-	this.points=10;
+	this.sprite = 'images/gem-blue.png';
+	this.points = 10;
 
 };
 
-GemBlue.prototype=Object.create(Gem.prototype);
+GemBlue.prototype = Object.create(Gem.prototype);
 GemBlue.prototype.constructor=Gem;
 
 /*
@@ -229,9 +237,9 @@ var colWidth = 101,
     playerStartposY = 415;
 
 
-var gems=[new GemBlue(), new GemOrange()];
-var allEnemies=[new Enemy(), new Enemy(), new Enemy()];
-var player=new Player();
+var gems = [new GemBlue(), new GemOrange()];
+var allEnemies = [new Enemy(), new Enemy(), new Enemy()];
+var player = new Player();
 
 
 /**
